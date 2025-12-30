@@ -1,0 +1,80 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                Int      @id @default(autoincrement())
+  name              String
+  email             String   @unique
+  password          String
+  emailVerifiedAt   DateTime?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
+
+model Project {
+  id           Int      @id @default(autoincrement())
+  projectName  String
+  url          String
+  description  String
+  image1       String?
+  image2       String?
+  priority     Int?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Team {
+  id          Int      @id @default(autoincrement())
+  photo       String?
+  name        String
+  designation String
+  linkedin    String?
+  priority    Int?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Contact {
+  id        Int      @id @default(autoincrement())
+  name      String
+  phone     String
+  email     String
+  message   String
+  createdAt DateTime @default(now())
+}
+enum DocumentType {
+  EXPERIENCE_CERTIFICATE
+  PROPOSAL
+  AGREEMENT
+  INVOICE
+  COMPANY_PROFILE
+  LEGAL
+  OTHER
+}
+
+enum DocumentStatus {
+  ACTIVE
+  ARCHIVED
+}
+
+model CompanyDocument {
+  id           Int            @id @default(autoincrement())
+  title        String
+  documentType DocumentType
+  description  String?
+  referral_no  String?
+  file         String?
+  relatedTo    String?
+  issuedDate   DateTime?
+  expiryDate   DateTime?
+  status       DocumentStatus @default(ACTIVE)
+
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
