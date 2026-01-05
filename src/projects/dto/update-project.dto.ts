@@ -15,7 +15,7 @@ export class UpdateProjectDto {
   description?: string;
 
   @IsOptional()
-  @Type(() => Number) // 🔥 THIS FIXES IT
+  @Type(() => Number)
   @IsInt()
   priority?: number;
 }
