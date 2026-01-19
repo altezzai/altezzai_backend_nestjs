@@ -96,7 +96,9 @@ export class TeamsController {
       designation: body.designation,
       linkedin: body.linkedin,
       priority: body.priority ? Number(body.priority) : 0,
-      photo: photoToSave,
+      photo: filename || team.photo,
+      is_public: body.is_public,
+      is_active: body.is_active,
     });
   }
 

@@ -35,6 +35,8 @@ CREATE TABLE `Team` (
     `designation` VARCHAR(191) NOT NULL,
     `linkedin` VARCHAR(191) NULL,
     `priority` INTEGER NULL,
+    `is_public` BOOLEAN NOT NULL DEFAULT true,
+    `is_active` BOOLEAN NOT NULL DEFAULT true,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
 

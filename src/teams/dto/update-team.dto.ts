@@ -18,4 +18,10 @@ export class UpdateTeamDto {
   @Type(() => Number)
   @IsInt()
   priority?: number;
+
+  @IsOptional()
+  is_public?: boolean;
+  
+  @IsOptional()
+  is_active?: boolean;
 }
