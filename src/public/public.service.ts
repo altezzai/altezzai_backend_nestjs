@@ -85,6 +85,13 @@ export class PublicService {
       }),
       this.prisma.client.count(),
     ]);
+
+    // Transform data to include full logo URLs
+    const transformedData = data.map((client) => ({
+      ...client,
+      logo: client.logo ? `/uploads/clients/${client.logo}` : null,
+    }));
+
     return {
       meta: {
         total,
@@ -92,7 +99,7 @@ export class PublicService {
         limit: limitNumber,
         totalPages: Math.ceil(total / limitNumber),
       },
-      data,
+      data: transformedData,
     };
   }
 }

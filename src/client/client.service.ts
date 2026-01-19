@@ -5,14 +5,14 @@ import { PrismaService } from '../prisma/prisma.service';
 export class ClientsService {
   constructor(private prisma: PrismaService) {}
 
-  create(data: any) {
-    const client = this.prisma.client.create({ data });
+  async create(data: any) {
+    const client = await this.prisma.client.create({ data });
 
     // Transform to include full logo URL
-    return client.then((c) => ({
-      ...c,
-      logo: c.logo ? `/uploads/clients/${c.logo}` : null,
-    }));
+    return {
+      ...client,
+      logo: client.logo ? `/uploads/clients/${client.logo}` : null,
+    };
   }
 
   async findAll() {

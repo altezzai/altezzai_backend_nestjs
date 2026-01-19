@@ -83,7 +83,7 @@ model CompanyDocument {
 model Client {
   id          Int      @id @default(autoincrement())
   name        String
-  description String?
+  description String?  @db.Text
   logo        String?
 
   createdAt   DateTime @default(now())
