@@ -17,4 +17,8 @@ export class PublicController {
   getTeams(@Query() query: PaginationDto) {
     return this.publicService.getAllTeams(query.page, query.limit);
   }
+  @Get('clients')
+  getClients(@Query() query: PaginationDto) {
+    return this.publicService.getAllClients(query.page, query.limit);
+  }
 }
