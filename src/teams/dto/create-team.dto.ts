@@ -14,4 +14,9 @@ export class CreateTeamDto {
   @IsOptional()
   @IsInt()
   priority?: number;
+
+  @IsOptional()
+  is_public?: boolean;
+  @IsOptional()
+  is_active?: boolean;
 }

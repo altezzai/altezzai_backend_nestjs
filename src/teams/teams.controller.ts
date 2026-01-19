@@ -88,6 +88,8 @@ export class TeamsController {
       linkedin: body.linkedin,
       priority: body.priority ? Number(body.priority) : 0,
       photo: filename || team.photo,
+      is_public: body.is_public,
+      is_active: body.is_active,
     });
   }
 
