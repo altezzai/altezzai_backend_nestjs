@@ -1,4 +1,5 @@
 import { IsInt, IsOptional, IsString, IsUrl } from 'class-validator';
+import { Type } from 'class-transformer';
 
 export class UpdateTeamDto {
   @IsOptional()
@@ -14,6 +15,7 @@ export class UpdateTeamDto {
   linkedin?: string;
 
   @IsOptional()
+  @Type(() => Number)
   @IsInt()
   priority?: number;
 }

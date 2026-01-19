@@ -82,12 +82,21 @@ export class TeamsController {
       filename = await compressAndSaveFile(file, 'uploads/teams');
     }
 
+    // Extract just the filename from the full path if no new file uploaded
+    let photoToSave = filename;
+    if (!filename && team.photo) {
+      // Remove the /uploads/teams/ prefix to get just the filename
+      photoToSave = team.photo.startsWith('/uploads/teams/')
+        ? team.photo.replace('/uploads/teams/', '')
+        : team.photo;
+    }
+
     return this.teamsService.update(id, {
       name: body.name,
       designation: body.designation,
       linkedin: body.linkedin,
       priority: body.priority ? Number(body.priority) : 0,
-      photo: filename || team.photo,
+      photo: photoToSave,
     });
   }
 
