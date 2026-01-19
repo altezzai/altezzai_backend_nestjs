@@ -1,5 +1,6 @@
-import { IsInt, IsOptional, IsString, IsUrl } from 'class-validator';
+import { IsInt, IsOptional, IsString, IsUrl, IsBoolean } from 'class-validator';
 import { Type } from 'class-transformer';
+import { Transform } from 'class-transformer';
 
 export class UpdateTeamDto {
   @IsOptional()
@@ -19,9 +20,14 @@ export class UpdateTeamDto {
   @IsInt()
   priority?: number;
 
+// ✅ FIX BOOLEAN TRANSFORMATION
   @IsOptional()
-  is_public?: boolean;
-  
+  @Transform(({ value }) => value === 'true' || value === true)
+  @IsBoolean()
+  isPublic?: boolean;
+
   @IsOptional()
-  is_active?: boolean;
+  @Transform(({ value }) => value === 'true' || value === true)
+  @IsBoolean()
+  isActive?: boolean;
 }

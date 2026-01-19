@@ -44,7 +44,7 @@ export class TeamsController {
     return this.teamsService.create({
       name: body.name,
       designation: body.designation,
-      linkedin: body.linkedin,
+      linkedin: body.linkedin || undefined,
       priority: body.priority ? Number(body.priority) : 0,
       photo: filename,
     });
@@ -94,11 +94,11 @@ export class TeamsController {
     return this.teamsService.update(id, {
       name: body.name,
       designation: body.designation,
-      linkedin: body.linkedin,
+      linkedin: body.linkedin ,
       priority: body.priority ? Number(body.priority) : 0,
       photo: filename || team.photo,
-      is_public: body.is_public,
-      is_active: body.is_active,
+   isPublic: body.isPublic ?? team.isPublic,
+  isActive: body.isActive ?? team.isActive,
     });
   }
 

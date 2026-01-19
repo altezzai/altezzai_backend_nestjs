@@ -9,7 +9,6 @@ export class CreateTeamDto {
   designation: string;
 
   @IsOptional()
-  @IsUrl()
   linkedin?: string;
 
   @IsOptional()
@@ -17,8 +16,9 @@ export class CreateTeamDto {
   @IsInt()
   priority?: number;
 
-  @IsOptional()
-  is_public?: boolean;
-  @IsOptional()
-  is_active?: boolean;
+@IsOptional()
+isPublic?: boolean;
+
+@IsOptional()
+isActive?: boolean;
 }
