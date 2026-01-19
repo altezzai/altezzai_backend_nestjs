@@ -16,7 +16,7 @@ import { CreateTeamDto } from './dto/create-team.dto';
 import { UpdateTeamDto } from './dto/update-team.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { memoryStorage } from 'multer';
-import { compressAndSaveFile } from '../common/utils/file-upload.util';
+import { compressAndSaveFile, deleteFile } from '../common/utils/file-upload.util';
 import { PaginationDto } from '../common/dto/pagination.dto';
 
 @Controller('teams')
@@ -80,16 +80,11 @@ export class TeamsController {
 
     if (file) {
       filename = await compressAndSaveFile(file, 'uploads/teams');
-    }
 
-    // Extract just the filename from the full path if no new file uploaded
-    let photoToSave = filename;
-    if (!filename && team.photo) {
-      // Remove the /uploads/teams/ prefix to get just the filename
-      photoToSave = team.photo.startsWith('/uploads/teams/')
-        ? team.photo.replace('/uploads/teams/', '')
-        : team.photo;
-    }
+      if (team.photo) {
+        deleteFile(team.photo, 'uploads/teams');
+      }
+    }   
 
     return this.teamsService.update(id, {
       name: body.name,
