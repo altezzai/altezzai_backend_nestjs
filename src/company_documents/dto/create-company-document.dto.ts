@@ -5,7 +5,7 @@ export class CreateCompanyDocumentDto {
   @IsString()
   title: string;
 
-  @IsEnum(DocumentType)
+  @IsString()
   documentType: DocumentType;
 
   @IsOptional()
