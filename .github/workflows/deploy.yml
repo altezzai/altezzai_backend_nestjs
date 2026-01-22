@@ -30,11 +30,11 @@ jobs:
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_KEY }}
           source: |
-            dist
-            prisma
+            dist/**
+            prisma/**
             package.json
             package-lock.json
-            templates
+            templates/**
           target: ${{ secrets.DEPLOY_PATH }}/_temp
           overwrite: true
 
