@@ -34,6 +34,6 @@ export class CreateCompanyDocumentDto {
   expiryDate?: string;
 
   @IsOptional()
-  @IsEnum(DocumentStatus)
+  @IsString()
   status?: DocumentStatus;
 }
