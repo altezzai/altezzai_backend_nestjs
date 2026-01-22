@@ -6,15 +6,28 @@ import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  app.enableCors({
+    origin: ['http://localhost:5173'],
+  });
 
-  app.useStaticAssets(join(__dirname, '..', 'uploads'), {
+  // Serve static files from uploads directory
+  const uploadsPath = join(process.cwd(), 'uploads');
+  console.log('Serving static files from:', uploadsPath);
+
+  app.useStaticAssets(uploadsPath, {
     prefix: '/uploads',
   });
-  (new ValidationPipe({
-    transform: true, // 🔥 REQUIRED
-    whitelist: true,
-  }),
-    await app.listen(3000));
+
+  // Apply validation pipe
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true,
+      whitelist: true,
+    }),
+  );
+
+  console.log('Server starting on http://localhost:3000');
+  await app.listen(3000);
 }
 
 bootstrap();

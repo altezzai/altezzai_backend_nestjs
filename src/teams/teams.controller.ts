@@ -16,7 +16,7 @@ import { CreateTeamDto } from './dto/create-team.dto';
 import { UpdateTeamDto } from './dto/update-team.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { memoryStorage } from 'multer';
-import { compressAndSaveFile } from '../common/utils/file-upload.util';
+import { compressAndSaveFile, deleteFile } from '../common/utils/file-upload.util';
 import { PaginationDto } from '../common/dto/pagination.dto';
 
 @Controller('teams')
@@ -44,7 +44,7 @@ export class TeamsController {
     return this.teamsService.create({
       name: body.name,
       designation: body.designation,
-      linkedin: body.linkedin,
+      linkedin: body.linkedin || undefined,
       priority: body.priority ? Number(body.priority) : 0,
       photo: filename,
     });
@@ -80,16 +80,20 @@ export class TeamsController {
 
     if (file) {
       filename = await compressAndSaveFile(file, 'uploads/teams');
-    }
+
+      if (team.photo) {
+        deleteFile(team.photo, 'uploads/teams');
+      }
+    }   
 
     return this.teamsService.update(id, {
       name: body.name,
       designation: body.designation,
-      linkedin: body.linkedin,
+      linkedin: body.linkedin ,
       priority: body.priority ? Number(body.priority) : 0,
       photo: filename || team.photo,
-      is_public: body.is_public,
-      is_active: body.is_active,
+   isPublic: body.isPublic ?? team.isPublic,
+  isActive: body.isActive ?? team.isActive,
     });
   }
 

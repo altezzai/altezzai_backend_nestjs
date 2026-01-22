@@ -73,8 +73,6 @@ export class CompanyDocumentsController {
     if (file) {
       filename = await compressAndSaveFile(file, 'uploads/company-documents');
       if (document.file) {
-        // Delete old file
-
         deleteFile(document.file, uploadPath);
       }
     }

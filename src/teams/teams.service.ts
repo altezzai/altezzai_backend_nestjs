@@ -8,7 +8,17 @@ export class TeamsService {
   constructor(private prisma: PrismaService) {}
 
   async create(data: any) {
-    return this.prisma.team.create({ data });
+    const team = await this.prisma.team.create({ data });
+
+    // Transform to include full photo URL
+    return {
+      ...team,
+      photo: team.photo
+        ? team.photo.startsWith('/uploads/teams/')
+          ? team.photo
+          : `/uploads/teams/${team.photo}`
+        : null,
+    };
   }
 
   async findAll(page?: number, limit?: number) {
@@ -26,6 +36,16 @@ export class TeamsService {
       this.prisma.team.count(),
     ]);
 
+    // Transform data to include full photo URLs
+    const transformedData = data.map((team) => ({
+      ...team,
+      photo: team.photo
+        ? team.photo.startsWith('/uploads/teams/')
+          ? team.photo
+          : `/uploads/teams/${team.photo}`
+        : null,
+    }));
+
     return {
       meta: {
         total,
@@ -33,13 +53,25 @@ export class TeamsService {
         limit: limitNumber,
         totalPages: Math.ceil(total / limitNumber),
       },
-      data,
+      data: transformedData,
     };
   }
   async findOne(id: number) {
-    return this.prisma.team.findUnique({
+    const team = await this.prisma.team.findUnique({
       where: { id },
     });
+
+    if (!team) return null;
+
+    // Transform to include full photo URL
+    return {
+      ...team,
+      photo: team.photo
+        ? team.photo.startsWith('/uploads/teams/')
+          ? team.photo
+          : `/uploads/teams/${team.photo}`
+        : null,
+    };
   }
 
   async update(id: number, data: any) {
@@ -49,15 +81,33 @@ export class TeamsService {
       throw new NotFoundException('Team member not found');
     }
 
-    // delete old photo if replaced
-    if (data.photo && team.photo) {
-      fs.unlinkSync(path.join('uploads/teams', team.photo));
+    // delete old photo if replaced with a new one
+    if (data.photo && data.photo !== team.photo && team.photo) {
+      // Extract filename from full path if it exists
+      const oldPhotoFilename = team.photo.startsWith('/uploads/teams/')
+        ? team.photo.replace('/uploads/teams/', '')
+        : team.photo;
+
+      const oldPhotoPath = path.join('uploads/teams', oldPhotoFilename);
+      if (fs.existsSync(oldPhotoPath)) {
+        fs.unlinkSync(oldPhotoPath);
+      }
     }
 
-    return this.prisma.team.update({
+    const updatedTeam = await this.prisma.team.update({
       where: { id },
       data,
     });
+
+    // Transform to include full photo URL
+    return {
+      ...updatedTeam,
+      photo: updatedTeam.photo
+        ? updatedTeam.photo.startsWith('/uploads/teams/')
+          ? updatedTeam.photo
+          : `/uploads/teams/${updatedTeam.photo}`
+        : null,
+    };
   }
 
   async delete(id: number) {
@@ -65,14 +115,32 @@ export class TeamsService {
 
     if (!team) {
       throw new NotFoundException('Team member not found');
-      return 'Team member not found';
     }
 
+    // Delete photo file if it exists
     if (team.photo) {
-      fs.unlinkSync(path.join('uploads/teams', team.photo));
+      try {
+        // Extract filename from full path if it exists
+        const photoFilename = team.photo.startsWith('/uploads/teams/')
+          ? team.photo.replace('/uploads/teams/', '')
+          : team.photo;
+
+        const filePath = path.join(
+          process.cwd(),
+          'uploads',
+          'teams',
+          photoFilename,
+        );
+        if (fs.existsSync(filePath)) {
+          fs.unlinkSync(filePath);
+        }
+      } catch (error) {
+        console.error('Error deleting photo file:', error);
+        // Continue with database deletion even if file deletion fails
+      }
     }
 
-    this.prisma.team.delete({ where: { id } });
+    await this.prisma.team.delete({ where: { id } });
 
     return { message: 'Team member deleted successfully' };
   }

@@ -18,7 +18,7 @@ import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { UpdateProjectDto } from './dto/update-project.dto';
 import { memoryStorage } from 'multer';
-import { compressAndSaveFile } from '../common/utils/file-upload.util';
+import { compressAndSaveFile , deleteFile} from '../common/utils/file-upload.util';
 import { PaginationDto } from '../common/dto/pagination.dto';
 const uploadPath = 'uploads/projects';
 
@@ -46,15 +46,18 @@ export class ProjectsController {
     },
     @Body() body: CreateProjectDto, // 👈 important
   ) {
+
     let image1: string | undefined;
     let image2: string | undefined;
 
-    if (files.image1 && files.image1[0]) {
+    if (files?.image1?.[0]) {
       image1 = await compressAndSaveFile(files.image1[0], uploadPath);
+      console.log('Image1 saved:', image1);
     }
 
-    if (files.image2 && files.image2[0]) {
+    if (files?.image2?.[0]) {
       image2 = await compressAndSaveFile(files.image2[0], uploadPath);
+      console.log('Image2 saved:', image2);
     }
 
     return this.projectsService.create({
@@ -102,12 +105,19 @@ export class ProjectsController {
     }
     let image1: string | undefined;
     let image2: string | undefined;
-    if (files.image1 && files.image1[0]) {
+
+    if (files && files.image1 && files.image1[0]) {
       image1 = await compressAndSaveFile(files.image1[0], uploadPath);
+      if (project.image1) {
+        deleteFile(project.image1, uploadPath);
+      }
     }
 
-    if (files.image2 && files.image2[0]) {
+    if (files && files.image2 && files.image2[0]) {
       image2 = await compressAndSaveFile(files.image2[0], uploadPath);
+      if (project.image2) {
+        deleteFile(project.image2, uploadPath);
+      }
     }
 
     return this.projectsService.update(id, {

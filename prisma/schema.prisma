@@ -36,8 +36,8 @@ model Team {
   designation String
   linkedin    String?
   priority    Int?
-  is_public   Boolean  @default(true)
-  is_active   Boolean  @default(true)
+  isPublic    Boolean  @default(true)
+  isActive    Boolean  @default(true)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
@@ -83,7 +83,7 @@ model CompanyDocument {
 model Client {
   id          Int      @id @default(autoincrement())
   name        String
-  description String?
+  description String?  @db.Text
   logo        String?
 
   createdAt   DateTime @default(now())

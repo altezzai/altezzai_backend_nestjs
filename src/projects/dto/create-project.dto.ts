@@ -1,4 +1,5 @@
-import { IsInt, IsOptional, IsString, IsUrl } from 'class-validator';
+import { IsInt, IsOptional, IsString, IsUrl,  } from 'class-validator';
+import { Type } from 'class-transformer';
 
 export class CreateProjectDto {
   @IsString()
@@ -11,6 +12,7 @@ export class CreateProjectDto {
   description: string;
 
   @IsOptional()
+  @Type(() => Number)
   @IsInt()
   priority?: number;
 }

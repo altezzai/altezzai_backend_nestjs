@@ -20,6 +20,13 @@ export class PublicService {
       this.prisma.project.count(),
     ]);
 
+    // Transform data to include full image URLs
+    const transformedData = data.map((project) => ({
+      ...project,
+      image1: project.image1 ? `/uploads/projects/${project.image1}` : null,
+      image2: project.image2 ? `/uploads/projects/${project.image2}` : null,
+    }));
+
     return {
       meta: limitNumber
         ? {
@@ -29,7 +36,7 @@ export class PublicService {
             totalPages: Math.ceil(total / limitNumber),
           }
         : undefined,
-      data,
+      data: transformedData,
     };
   }
 
@@ -48,6 +55,12 @@ export class PublicService {
       this.prisma.team.count(),
     ]);
 
+    // Transform data to include full photo URLs
+    const transformedData = data.map((team) => ({
+      ...team,
+      photo: team.photo ? `/uploads/teams/${team.photo}` : null,
+    }));
+
     return {
       meta: {
         total,
@@ -55,7 +68,7 @@ export class PublicService {
         limit: limitNumber,
         totalPages: Math.ceil(total / limitNumber),
       },
-      data,
+      data: transformedData,
     };
   }
   async getAllClients(page?: number, limit?: number) {
@@ -72,6 +85,13 @@ export class PublicService {
       }),
       this.prisma.client.count(),
     ]);
+
+    // Transform data to include full logo URLs
+    const transformedData = data.map((client) => ({
+      ...client,
+      logo: client.logo ? `/uploads/clients/${client.logo}` : null,
+    }));
+
     return {
       meta: {
         total,
@@ -79,7 +99,7 @@ export class PublicService {
         limit: limitNumber,
         totalPages: Math.ceil(total / limitNumber),
       },
-      data,
+      data: transformedData,
     };
   }
 }
