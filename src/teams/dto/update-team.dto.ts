@@ -12,7 +12,6 @@ export class UpdateTeamDto {
   designation?: string;
 
   @IsOptional()
-  @IsUrl()
   linkedin?: string;
 
   @IsOptional()
