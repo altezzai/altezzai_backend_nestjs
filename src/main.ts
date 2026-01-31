@@ -4,10 +4,11 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';
 import { ValidationPipe } from '@nestjs/common';
 
+
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   app.enableCors({
-    origin: ['http://localhost:5173'],
+    origin: ['http://localhost:5173','https://altezzai.in/','https://altezzai.com/',],
   });
 
   // Serve static files from uploads directory
@@ -25,9 +26,8 @@ async function bootstrap() {
       whitelist: true,
     }),
   );
-
-  console.log('Server starting on http://localhost:3000');
-  await app.listen(3000);
+  console.log('Listening on port:', process.env.PORT || 3000);
+  await app.listen(process.env.PORT || 3000);
 }
 
 bootstrap();
