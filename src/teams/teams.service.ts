@@ -93,7 +93,9 @@ export class TeamsService {
         fs.unlinkSync(oldPhotoPath);
       }
     }
-
+    if (data.photo === null) {
+      data.photo = team.photo;
+    }
     const updatedTeam = await this.prisma.team.update({
       where: { id },
       data,
