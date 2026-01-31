@@ -8,7 +8,7 @@ import { ValidationPipe } from '@nestjs/common';
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   app.enableCors({
-    origin: ['http://localhost:5173','https://altezzai.in/','https://altezzai.com/',],
+    origin: ['http://localhost:5173','https://altezzai.in','https://altezzai.com',],
   });
 
   // Serve static files from uploads directory
