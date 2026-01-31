@@ -20,11 +20,7 @@ export class PublicService {
       this.prisma.project.count(),
     ]);
 
-    // Transform data to include full image URLs
-    const transformedData = data.map((project) => ({
-      ...project,
 
-    }));
 
     return {
       meta: limitNumber
@@ -35,7 +31,7 @@ export class PublicService {
             totalPages: Math.ceil(total / limitNumber),
           }
         : undefined,
-      data: transformedData,
+      data,
     };
   }
 
