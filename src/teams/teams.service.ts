@@ -81,21 +81,7 @@ export class TeamsService {
       throw new NotFoundException('Team member not found');
     }
 
-    // delete old photo if replaced with a new one
-    if (data.photo && data.photo !== team.photo && team.photo) {
-      // Extract filename from full path if it exists
-      const oldPhotoFilename = team.photo.startsWith('/uploads/teams/')
-        ? team.photo.replace('/uploads/teams/', '')
-        : team.photo;
-
-      const oldPhotoPath = path.join('uploads/teams', oldPhotoFilename);
-      if (fs.existsSync(oldPhotoPath)) {
-        fs.unlinkSync(oldPhotoPath);
-      }
-    }
-    if (data.photo === null) {
-      data.photo = team.photo;
-    }
+    
     const updatedTeam = await this.prisma.team.update({
       where: { id },
       data,
