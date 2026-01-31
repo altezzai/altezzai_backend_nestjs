@@ -58,7 +58,7 @@ export class PublicService {
     // Transform data to include full photo URLs
     const transformedData = data.map((team) => ({
       ...team,
-      photo: team.photo ? `/uploads/teams/${team.photo}` : null,
+
     }));
 
     return {

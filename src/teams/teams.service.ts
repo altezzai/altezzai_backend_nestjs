@@ -90,11 +90,7 @@ export class TeamsService {
     // Transform to include full photo URL
     return {
       ...updatedTeam,
-      photo: updatedTeam.photo
-        ? updatedTeam.photo.startsWith('/uploads/teams/')
-          ? updatedTeam.photo
-          : `/uploads/teams/${updatedTeam.photo}`
-        : null,
+     
     };
   }
 
