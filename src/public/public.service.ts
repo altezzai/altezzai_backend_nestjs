@@ -20,7 +20,12 @@ export class PublicService {
       this.prisma.project.count(),
     ]);
 
+ const transformedData = data.map((project) => ({
+      ...project,
+      image1: project.image1 ? `/uploads/projects/${project.image1}` : null,
+      image2: project.image2 ? `/uploads/projects/${project.image2}` : null,
 
+    }));
 
     return {
       meta: limitNumber
@@ -31,7 +36,7 @@ export class PublicService {
             totalPages: Math.ceil(total / limitNumber),
           }
         : undefined,
-      data,
+      data: transformedData,
     };
   }
 
@@ -49,6 +54,16 @@ export class PublicService {
       }),
       this.prisma.team.count(),
     ]);
+       const transformedData = data.map((team) => ({
+      ...team,
+      photo: team.photo
+        ? team.photo.startsWith('/uploads/teams/')
+          ? team.photo
+          : `/uploads/teams/${team.photo}`
+        : null,
+
+
+    }));
 
     return {
       meta: {
@@ -57,7 +72,7 @@ export class PublicService {
         limit: limitNumber,
         totalPages: Math.ceil(total / limitNumber),
       },
-      data,
+      data: transformedData,
     };
   }
   async getAllClients(page?: number, limit?: number) {
@@ -74,6 +89,11 @@ export class PublicService {
       }),
       this.prisma.client.count(),
     ]);
+     const transformedData = data.map((client) => ({
+      ...client,
+      logo: client.logo ? `/uploads/clients/${client.logo}` : null,
+    }));
+
 
 
     return {
@@ -83,7 +103,7 @@ export class PublicService {
         limit: limitNumber,
         totalPages: Math.ceil(total / limitNumber),
       },
-      data,
+      data: transformedData,
     };
   }
 }
