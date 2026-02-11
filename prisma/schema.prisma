@@ -21,7 +21,7 @@ model Project {
   id           Int      @id @default(autoincrement())
   projectName  String
   url          String
-  description  String
+  description  String?  @db.Text
   image1       String?
   image2       String?
   priority     Int?
@@ -69,7 +69,7 @@ model CompanyDocument {
   id           Int            @id @default(autoincrement())
   title        String
   documentType DocumentType
-  description  String?
+  description  String?  @db.Text
   referral_no  String?
   file         String?
   relatedTo    String?
